@@ -31,7 +31,7 @@ class Transaction
     end
 
     aasm.event :complete do |t|
-      t.transitions from: :pending, to: :active
+      t.transitions from: :active, to: :completed
     end
   end
 end

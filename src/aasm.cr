@@ -18,4 +18,8 @@ module AASM
   def fire(event : Symbol)
     aasm.fire event
   end
+
+  def fire!(event : Symbol)
+    aasm.fire event, true
+  end
 end

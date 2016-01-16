@@ -22,4 +22,10 @@ module AASM
       super "State '#{state_name}' already defined."
     end
   end
+
+  class UnableToChangeState < Exception
+    def initialize(from, to)
+      super "Unable to change state from '#{from}' to '#{to}'"
+    end
+  end
 end
