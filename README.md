@@ -1,4 +1,4 @@
-# aasm.cr
+# aasm.cr [![Build Status](https://travis-ci.org/veelenga/aasm.cr.svg?branch=master)](https://travis-ci.org/veelenga/aasm.cr)
 
 Easy to use finite state machine for Crystal classes.
 
