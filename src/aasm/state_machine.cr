@@ -32,7 +32,7 @@ class AASM::StateMachine
     nil
   end
 
-  def fire(event_name : Symbol, raise_exception = false)
+  def fire_event(event_name : Symbol, raise_exception = false)
     check_events_exist event_name
 
     transition = @events[event_name].transition

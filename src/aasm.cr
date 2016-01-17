@@ -16,10 +16,10 @@ module AASM
   end
 
   def fire(event : Symbol)
-    aasm.fire event
+    aasm.fire_event event
   end
 
   def fire!(event : Symbol)
-    aasm.fire event, true
+    aasm.fire_event event, raise_exception: true
   end
 end

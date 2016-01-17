@@ -1,23 +1,13 @@
 # aasm.cr
 
-Easy to use state machine for Crystal.
-
-## Installation
-
-
-Add this to your application's `shard.yml`:
-
-```yaml
-dependencies:
-  aasm:
-    github: veelenga/aasm.cr
-```
+Easy to use finite state machine for Crystal classes.
 
 ## Usage
 
-```crystal
-require "aasm"
+Adding a state machine is as simple as including `AASM` module and overwriting `act_as_state_machine` method
+where you can start defining **states** and **events** with their **transitions**:
 
+```crystal
 class Transaction
   include AASM
 
@@ -26,12 +16,12 @@ class Transaction
     aasm.state :active,  enter: -> { puts "Just got activated" }
     aasm.state :completed
 
-    aasm.event :activate do |t|
-      t.transitions from: :pending, to: :active
+    aasm.event :activate do |e|
+      e.transitions from: :pending, to: :active
     end
 
-    aasm.event :complete do |t|
-      t.transitions from: :active, to: :completed
+    aasm.event :complete do |e|
+      e.transitions from: :active, to: :completed
     end
   end
 end
