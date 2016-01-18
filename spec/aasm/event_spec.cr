@@ -24,7 +24,7 @@ module AASM
         e = Event.new
         e.transitions(from: :pending, to: :active)
         e.transitions(from: :active, to: :competed)
-        e.transition.from.should eq :pending
+        e.transition.from.should eq [:pending]
       end
     end
   end

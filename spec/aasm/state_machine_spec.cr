@@ -28,7 +28,7 @@ def three_states_machine(enter1 = -> {}, guard1 = -> { true }, enter2 = -> {}, g
       e.transitions from: :pending, to: :active
     end
     s.event :complete do |e|
-      e.transitions from: :active, to: :completed
+      e.transitions from: [:active, :pending], to: :completed
     end
   end
 end

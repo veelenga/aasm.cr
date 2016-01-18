@@ -5,7 +5,7 @@ class AASM::Event
   def initialize(@transition = nil : (Nil | Transition))
   end
 
-  def transitions(from = nil : Symbol, to = nil : Symbol)
+  def transitions(from = nil : (Symbol | Array(Symbol)), to = nil : Symbol)
     @transition ||= Transition.new({from: from, to: to})
   end
 end

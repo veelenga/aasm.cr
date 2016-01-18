@@ -20,14 +20,14 @@ class AASM::StateMachine
     event = Event.new
     yield event
     transition = event.transition
-    check_states_exist transition.from, transition.to
+    check_states_exist transition.from + [transition.to]
     @transition_table << transition
     @events[name] = event
   end
 
   def next_state
     @transition_table.each do |t|
-      return t.to if t.from == @current_state_name
+      return t.to if t.from.includes? @current_state_name
     end
     nil
   end
@@ -36,7 +36,7 @@ class AASM::StateMachine
     check_events_exist event_name
 
     transition = @events[event_name].transition
-    if transition.from == @current_state_name
+    if transition.from.includes? @current_state_name
       state = @states[transition.to]
       if state.guard.nil? || state.guard.not_nil!.call
         state.enter.try &.call
@@ -47,7 +47,7 @@ class AASM::StateMachine
     end
   end
 
-  private def check_states_exist(*state_names)
+  private def check_states_exist(state_names)
     state_names.each do |state_name|
       raise NoSuchStateException.new state_name unless @states[state_name]?
     end
