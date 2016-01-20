@@ -19,7 +19,7 @@
 
         <header>
           <h1>Aasm.cr</h1>
-          <h2>Easy to use finite state machine for Crystal</h2>
+          <h2>Easy to use finite state machine for Crystal classes.</h2>
         </header>
 
         <section id="downloads" class="clearfix">
@@ -31,17 +31,12 @@
         <hr>
 
         <section id="main_content">
-          <h1>
-<a id="aasmcr-" class="anchor" href="#aasmcr-" aria-hidden="true"><span class="octicon octicon-link"></span></a>aasm.cr <a href="https://travis-ci.org/veelenga/aasm.cr"><img src="https://travis-ci.org/veelenga/aasm.cr.svg?branch=master" alt="Build Status"></a>
-</h1>
+          <p>Aasm stands for <strong>"Acts As State Machine"</strong> which means that some abstract object can act as a <a href="https://en.wikipedia.org/wiki/Finite-state_machine">finite state machine</a> and can be in one of a finite number of states at a time; can change one state to another when initiated by a triggering event.</p>
 
-<p>Easy to use finite state machine for Crystal classes.</p>
+<h1>
+<a id="getting-started" class="anchor" href="#getting-started" aria-hidden="true"><span class="octicon octicon-link"></span></a>Getting Started</h1>
 
-<h2>
-<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h2>
-
-<p>Adding a state machine is as simple as including <code>AASM</code> module and overwriting <code>act_as_state_machine</code> method
-where you can start defining <strong>states</strong> and <strong>events</strong> with their <strong>transitions</strong>:</p>
+<p>Adding a state machine to a Crystal class is as simple as including <code>AASM</code> module and writing <code>act_as_state_machine</code> method where you can define <strong>states</strong> and <strong>events</strong> with their <strong>transitions</strong>:</p>
 
 <div class="highlight highlight-source-crystal"><pre><span class="pl-k">class</span> <span class="pl-en">Transaction</span>
   <span class="pl-k">include </span><span class="pl-c1">AASM</span>
@@ -67,6 +62,113 @@ t.next_state     <span class="pl-c">#=&gt; :active</span>
 t.fire <span class="pl-c1">:activate</span> <span class="pl-c"># Just got activated</span>
 t.state          <span class="pl-c">#=&gt; :active</span>
 t.next_state     <span class="pl-c">#=&gt; :completed</span></pre></div>
+
+<h2>
+<a id="states" class="anchor" href="#states" aria-hidden="true"><span class="octicon octicon-link"></span></a>States</h2>
+
+<p>State can be defined using <code>aasm.state</code> method passing the name and options:</p>
+
+<div class="highlight highlight-source-crystal"><pre>aasm.state <span class="pl-c1">:passive</span>, <span class="pl-c1">initial:</span> <span class="pl-c1">true</span></pre></div>
+
+<h3>
+<a id="state-options" class="anchor" href="#state-options" aria-hidden="true"><span class="octicon octicon-link"></span></a>State options</h3>
+
+<p>Currently state supports the following options:</p>
+
+<ul>
+<li>
+<code>initial</code> : <code>Bool</code> <strong>optional</strong> - indicates whether this state is initial or not. If initial state not specified, first one will be considered as initial</li>
+<li>
+<code>guard</code> : <code>(-&gt; Bool)</code> <strong>optional</strong> - a callback, that gets evaluated once state is getting entered. State will not enter if guard returns false</li>
+<li>
+<code>enter</code> : <code>(-&gt;)</code> <strong>optional</strong> - a hook, that gets evaluated once state entered.</li>
+</ul>
+
+<h2>
+<a id="events" class="anchor" href="#events" aria-hidden="true"><span class="octicon octicon-link"></span></a>Events</h2>
+
+<p>Event can be defined using <code>aasm.state</code> method passing the name and a block with transitions:</p>
+
+<div class="highlight highlight-source-crystal"><pre>aasm.event <span class="pl-c1">:delete</span> <span class="pl-k">do </span>|<span class="pl-smi">e</span>|
+  e.transitions <span class="pl-c1">from:</span> <span class="pl-c1">:active</span>, <span class="pl-c1">to:</span> <span class="pl-c1">:deleted</span>
+<span class="pl-k">end</span></pre></div>
+
+<p>Event has to be defined after state definition. In other case <code>NoSuchStateException</code> will be raise.</p>
+
+<h2>
+<a id="transitions" class="anchor" href="#transitions" aria-hidden="true"><span class="octicon octicon-link"></span></a>Transitions</h2>
+
+<p>Transition can be defined on event with <code>transitions</code> method passing options:</p>
+
+<div class="highlight highlight-source-crystal"><pre>aasm.event <span class="pl-c1">:complete</span> <span class="pl-k">do </span>|<span class="pl-smi">e</span>|
+  e.transitions <span class="pl-c1">from:</span> [<span class="pl-c1">:pending</span>, <span class="pl-c1">:active</span>], <span class="pl-c1">to:</span> <span class="pl-c1">:deleted</span>
+<span class="pl-k">end</span></pre></div>
+
+<h3>
+<a id="transition-options" class="anchor" href="#transition-options" aria-hidden="true"><span class="octicon octicon-link"></span></a>Transition options</h3>
+
+<p>Currently transition supports the following options:</p>
+
+<ul>
+<li>
+<code>from</code> : <code>(Symbol | Array(Symbol))</code> <strong>required</strong> - state (or states) from which state of state machine can be changed when event fired</li>
+<li>
+<code>to</code> : <code>Symbol</code> <strong>required</strong> - state to which state of state machine will change when event fired.</li>
+</ul>
+
+<h1>
+<a id="more-examples" class="anchor" href="#more-examples" aria-hidden="true"><span class="octicon octicon-link"></span></a>More examples</h1>
+
+<h2>
+<a id="one-state-machine-circular" class="anchor" href="#one-state-machine-circular" aria-hidden="true"><span class="octicon octicon-link"></span></a>One state machine (circular)</h2>
+
+<div class="highlight highlight-source-crystal"><pre><span class="pl-k">class</span> <span class="pl-en">CircularStateMachine</span>
+  <span class="pl-k">include </span><span class="pl-c1">AASM</span>
+
+  <span class="pl-k">def</span> <span class="pl-en">act_as_state_machine</span>
+    aasm.state <span class="pl-c1">:started</span>
+
+    aasm.event <span class="pl-c1">:restart</span> <span class="pl-k">do </span>|<span class="pl-smi">e</span>|
+      e.transitions <span class="pl-c1">from:</span> <span class="pl-c1">:started</span>, <span class="pl-c1">to:</span> <span class="pl-c1">:started</span>
+    <span class="pl-k">end</span>
+  <span class="pl-k">end</span>
+<span class="pl-k">end</span></pre></div>
+
+<h2>
+<a id="two-states-machine" class="anchor" href="#two-states-machine" aria-hidden="true"><span class="octicon octicon-link"></span></a>Two states machine</h2>
+
+<div class="highlight highlight-source-crystal"><pre><span class="pl-k">class</span> <span class="pl-en">TwoStateMachine</span>
+  <span class="pl-k">include </span><span class="pl-c1">AASM</span>
+
+  <span class="pl-k">def</span> <span class="pl-en">act_as_state_machine</span>
+    assm.state <span class="pl-c1">:active</span>
+    aasm.state <span class="pl-c1">:deleted</span>
+
+    aasm.event <span class="pl-c1">:delete</span> <span class="pl-k">do </span>|<span class="pl-smi">e</span>|
+      e.transitions <span class="pl-c1">from:</span> <span class="pl-c1">:active</span>, <span class="pl-c1">to:</span> <span class="pl-c1">:deleted</span>
+    <span class="pl-k">end</span>
+  <span class="pl-k">end</span>
+<span class="pl-k">end</span></pre></div>
+
+<h2>
+<a id="three-states-machine" class="anchor" href="#three-states-machine" aria-hidden="true"><span class="octicon octicon-link"></span></a>Three states machine</h2>
+
+<div class="highlight highlight-source-crystal"><pre><span class="pl-k">class</span> <span class="pl-en">ThreeStatesMachine</span>
+  <span class="pl-k">include </span><span class="pl-c1">AASM</span>
+
+  <span class="pl-k">def</span> <span class="pl-en">act_as_state_machine</span>
+    aasm.state <span class="pl-c1">:pending</span>, <span class="pl-c1">initial:</span> <span class="pl-c1">true</span>
+    aasm.state <span class="pl-c1">:active</span>
+    aasm.state <span class="pl-c1">:completed</span>
+
+    aasm.event <span class="pl-c1">:activate</span> <span class="pl-k">do </span>|<span class="pl-smi">e</span>|
+      e.transitions <span class="pl-c1">from:</span> <span class="pl-c1">:pending</span>, <span class="pl-c1">to:</span> <span class="pl-c1">:active</span>
+    <span class="pl-k">end</span>
+    aasm.event <span class="pl-c1">:complete</span> <span class="pl-k">do </span>|<span class="pl-smi">e</span>|
+      e.transitions <span class="pl-c1">from:</span> [<span class="pl-c1">:active</span>, <span class="pl-c1">:pending</span>], <span class="pl-c1">to:</span> <span class="pl-c1">:completed</span>
+    <span class="pl-k">end</span>
+  <span class="pl-k">end</span>
+<span class="pl-k">end</span></pre></div>
         </section>
 
         <footer>
@@ -74,7 +176,17 @@ t.next_state     <span class="pl-c">#=&gt; :completed</span></pre></div>
           This page was generated by <a href="https://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.
         </footer>
 
-        
+                  <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-63584551-3");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
       </div>
     </div>
   </body>
