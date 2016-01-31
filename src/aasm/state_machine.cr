@@ -5,7 +5,7 @@ class AASM::StateMachine
   def initialize
     @states = {} of Symbol => State
     @events = {} of Symbol => Event
-    @transition_table = [] of Transition
+    @transition_table = {} of Symbol => Array(Symbol)
   end
 
   def state(name : Symbol, initial = false : Bool, enter = nil : (->), guard = nil : (-> Bool))
@@ -21,15 +21,12 @@ class AASM::StateMachine
     yield event
     transition = event.transition
     check_states_exist transition.from + [transition.to]
-    @transition_table << transition
+    transition.from.each { |s| (@transition_table[s] ||= [] of Symbol) << transition.to }
     @events[name] = event
   end
 
   def next_state
-    @transition_table.each do |t|
-      return t.to if t.from.includes? @current_state_name
-    end
-    nil
+    @transition_table[@current_state_name]?.try &.first
   end
 
   def fire_event(event_name : Symbol, raise_exception = false)

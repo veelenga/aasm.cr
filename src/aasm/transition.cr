@@ -9,6 +9,6 @@ struct AASM::Transition
     elsif from.is_a? Array(Symbol)
       @from = from
     end
-    @to = opts[:to]
+    @to = opts[:to] as Symbol
   end
 end

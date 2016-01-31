@@ -34,6 +34,8 @@ t.state          #=> :active
 t.next_state     #=> :completed
 ```
 
+Refer to [documentation](http://veelenga.com/aasm.cr/) for more information.
+
 ## Contributing
 
 1. Fork it ( https://github.com/veelenga/aasm/fork )
