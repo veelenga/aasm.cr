@@ -1,40 +1,28 @@
 <!DOCTYPE html>
-<html>
+<html lang="en-us">
   <head>
-    <meta charset='utf-8'>
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/github-dark.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+    <meta charset="UTF-8">
     <title>Aasm.cr by veelenga</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
   </head>
-
   <body>
-    <div id="container">
-      <div class="inner">
+    <section class="page-header">
+      <h1 class="project-name">Aasm.cr</h1>
+      <h2 class="project-tagline">Easy to use finite state machine for Crystal classes.</h2>
+      <a href="https://github.com/veelenga/aasm.cr" class="btn">View on GitHub</a>
+      <a href="https://github.com/veelenga/aasm.cr/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/veelenga/aasm.cr/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
 
-        <header>
-          <h1>Aasm.cr</h1>
-          <h2>Easy to use finite state machine for Crystal classes.</h2>
-        </header>
-
-        <section id="downloads" class="clearfix">
-          <a href="https://github.com/veelenga/aasm.cr/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
-          <a href="https://github.com/veelenga/aasm.cr/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
-          <a href="https://github.com/veelenga/aasm.cr" id="view-on-github" class="button"><span>View on GitHub</span></a>
-        </section>
-
-        <hr>
-
-        <section id="main_content">
-          <p>Aasm stands for <strong>"Acts As State Machine"</strong> which means that some abstract object can act as a <a href="https://en.wikipedia.org/wiki/Finite-state_machine">finite state machine</a> and can be in one of a finite number of states at a time; can change one state to another when initiated by a triggering event.</p>
+    <section class="main-content">
+      <p>Aasm stands for <strong>"Acts As State Machine"</strong> which means that some abstract object can act as a <a href="https://en.wikipedia.org/wiki/Finite-state_machine">finite state machine</a> and can be in one of a finite number of states at a time; can change one state to another when initiated by a triggering event.</p>
 
 <h1>
-<a id="getting-started" class="anchor" href="#getting-started" aria-hidden="true"><span class="octicon octicon-link"></span></a>Getting Started</h1>
+<a id="getting-started" class="anchor" href="#getting-started" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Getting Started</h1>
 
 <p>Adding a state machine to a Crystal class is as simple as including <code>AASM</code> module and writing <code>act_as_state_machine</code> method where you can define <strong>states</strong> and <strong>events</strong> with their <strong>transitions</strong>:</p>
 
@@ -64,14 +52,14 @@ t.state          <span class="pl-c">#=&gt; :active</span>
 t.next_state     <span class="pl-c">#=&gt; :completed</span></pre></div>
 
 <h2>
-<a id="states" class="anchor" href="#states" aria-hidden="true"><span class="octicon octicon-link"></span></a>States</h2>
+<a id="states" class="anchor" href="#states" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>States</h2>
 
 <p>State can be defined using <code>aasm.state</code> method passing the name and options:</p>
 
 <div class="highlight highlight-source-crystal"><pre>aasm.state <span class="pl-c1">:passive</span>, <span class="pl-c1">initial:</span> <span class="pl-c1">true</span></pre></div>
 
 <h3>
-<a id="state-options" class="anchor" href="#state-options" aria-hidden="true"><span class="octicon octicon-link"></span></a>State options</h3>
+<a id="state-options" class="anchor" href="#state-options" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>State options</h3>
 
 <p>Currently state supports the following options:</p>
 
@@ -85,7 +73,7 @@ t.next_state     <span class="pl-c">#=&gt; :completed</span></pre></div>
 </ul>
 
 <h2>
-<a id="events" class="anchor" href="#events" aria-hidden="true"><span class="octicon octicon-link"></span></a>Events</h2>
+<a id="events" class="anchor" href="#events" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Events</h2>
 
 <p>Event can be defined using <code>aasm.state</code> method passing the name and a block with transitions:</p>
 
@@ -95,8 +83,17 @@ t.next_state     <span class="pl-c">#=&gt; :completed</span></pre></div>
 
 <p>Event has to be defined after state definition. In other case <code>NoSuchStateException</code> will be raise.</p>
 
+<p>Currently event supports the following options:</p>
+
+<ul>
+<li>
+<code>before</code> : <code>(-&gt;)</code> <strong>optional</strong> - a callback, that gets evaluated once before changing a state</li>
+<li>
+<code>after</code> : <code>(-&gt;)</code> <strong>optional</strong> - a callback, that gets evaluated once after changing a state.</li>
+</ul>
+
 <h2>
-<a id="transitions" class="anchor" href="#transitions" aria-hidden="true"><span class="octicon octicon-link"></span></a>Transitions</h2>
+<a id="transitions" class="anchor" href="#transitions" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Transitions</h2>
 
 <p>Transition can be defined on event with <code>transitions</code> method passing options:</p>
 
@@ -105,7 +102,7 @@ t.next_state     <span class="pl-c">#=&gt; :completed</span></pre></div>
 <span class="pl-k">end</span></pre></div>
 
 <h3>
-<a id="transition-options" class="anchor" href="#transition-options" aria-hidden="true"><span class="octicon octicon-link"></span></a>Transition options</h3>
+<a id="transition-options" class="anchor" href="#transition-options" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Transition options</h3>
 
 <p>Currently transition supports the following options:</p>
 
@@ -117,10 +114,10 @@ t.next_state     <span class="pl-c">#=&gt; :completed</span></pre></div>
 </ul>
 
 <h1>
-<a id="more-examples" class="anchor" href="#more-examples" aria-hidden="true"><span class="octicon octicon-link"></span></a>More examples</h1>
+<a id="more-examples" class="anchor" href="#more-examples" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>More examples</h1>
 
 <h2>
-<a id="one-state-machine-circular" class="anchor" href="#one-state-machine-circular" aria-hidden="true"><span class="octicon octicon-link"></span></a>One state machine (circular)</h2>
+<a id="one-state-machine-circular" class="anchor" href="#one-state-machine-circular" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>One state machine (circular)</h2>
 
 <div class="highlight highlight-source-crystal"><pre><span class="pl-k">class</span> <span class="pl-en">CircularStateMachine</span>
   <span class="pl-k">include </span><span class="pl-c1">AASM</span>
@@ -135,7 +132,7 @@ t.next_state     <span class="pl-c">#=&gt; :completed</span></pre></div>
 <span class="pl-k">end</span></pre></div>
 
 <h2>
-<a id="two-states-machine" class="anchor" href="#two-states-machine" aria-hidden="true"><span class="octicon octicon-link"></span></a>Two states machine</h2>
+<a id="two-states-machine" class="anchor" href="#two-states-machine" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Two states machine</h2>
 
 <div class="highlight highlight-source-crystal"><pre><span class="pl-k">class</span> <span class="pl-en">TwoStateMachine</span>
   <span class="pl-k">include </span><span class="pl-c1">AASM</span>
@@ -151,7 +148,7 @@ t.next_state     <span class="pl-c">#=&gt; :completed</span></pre></div>
 <span class="pl-k">end</span></pre></div>
 
 <h2>
-<a id="three-states-machine" class="anchor" href="#three-states-machine" aria-hidden="true"><span class="octicon octicon-link"></span></a>Three states machine</h2>
+<a id="three-states-machine" class="anchor" href="#three-states-machine" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Three states machine</h2>
 
 <div class="highlight highlight-source-crystal"><pre><span class="pl-k">class</span> <span class="pl-en">ThreeStatesMachine</span>
   <span class="pl-k">include </span><span class="pl-c1">AASM</span>
@@ -165,18 +162,22 @@ t.next_state     <span class="pl-c">#=&gt; :completed</span></pre></div>
       e.transitions <span class="pl-c1">from:</span> <span class="pl-c1">:pending</span>, <span class="pl-c1">to:</span> <span class="pl-c1">:active</span>
     <span class="pl-k">end</span>
     aasm.event <span class="pl-c1">:complete</span> <span class="pl-k">do </span>|<span class="pl-smi">e</span>|
+      e.before { <span class="pl-c1">puts</span> <span class="pl-s"><span class="pl-pds">"</span>completing...<span class="pl-pds">"</span></span> }
+      e.after  { <span class="pl-c1">puts</span> <span class="pl-s"><span class="pl-pds">"</span>completed<span class="pl-pds">"</span></span> }
       e.transitions <span class="pl-c1">from:</span> [<span class="pl-c1">:active</span>, <span class="pl-c1">:pending</span>], <span class="pl-c1">to:</span> <span class="pl-c1">:completed</span>
     <span class="pl-k">end</span>
   <span class="pl-k">end</span>
 <span class="pl-k">end</span></pre></div>
-        </section>
 
-        <footer>
-          Aasm.cr is maintained by <a href="https://github.com/veelenga">veelenga</a><br>
-          This page was generated by <a href="https://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.
-        </footer>
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/veelenga/aasm.cr">Aasm.cr</a> is maintained by <a href="https://github.com/veelenga">veelenga</a>.</span>
 
-                  <script type="text/javascript">
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+            <script type="text/javascript">
             var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
             document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
           </script>
@@ -187,7 +188,5 @@ t.next_state     <span class="pl-c">#=&gt; :completed</span></pre></div>
             } catch(err) {}
           </script>
 
-      </div>
-    </div>
   </body>
 </html>
