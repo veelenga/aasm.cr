@@ -169,6 +169,19 @@ module AASM
         count.should eq 1
       end
 
+      it "runs before and after blocks" do
+        count = 0
+        s = StateMachine.new
+        s.state :start
+        s.event :restart do |e|
+          e.before { count += 1 }
+          e.after  { count += 2 }
+          e.transitions from: :start, to: :start
+        end
+        s.fire_event :restart
+        count.should eq 3
+      end
+
       it "raises exception if no such event" do
         s = StateMachine.new
         expect_raises(NoSuchEventException) { s.fire_event :activate }

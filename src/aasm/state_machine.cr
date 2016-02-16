@@ -32,13 +32,17 @@ class AASM::StateMachine
   def fire_event(event_name : Symbol, raise_exception = false)
     check_events_exist event_name
 
-    transition = @events[event_name].transition
+    event = @events[event_name]
+    transition = event.transition
+
     if transition.from.includes? @current_state_name
+      event.before.try &.call
       state = @states[transition.to]
       if state.guard.nil? || state.guard.not_nil!.call
         state.enter.try &.call
         @current_state_name = transition.to
       end
+      event.after.try &.call
     else
       raise UnableToChangeState.new(@current_state_name, transition.to) if raise_exception
     end
