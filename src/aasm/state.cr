@@ -1,8 +1,9 @@
 struct AASM::State
 
-  getter :enter, :guard
+  getter enter : (-> Nil)?
+  getter guard : (-> Bool)?
 
-  def initialize(opts)
+  def initialize(opts = { enter: nil, guard: nil })
     @enter = opts[:enter]?
     @guard = opts[:guard]?
   end

@@ -1,6 +1,7 @@
 struct AASM::Transition
 
-  getter! :from, :to
+  getter! from : Array(Symbol)
+  getter! to : Symbol
 
   def initialize(opts)
     from = opts[:from]

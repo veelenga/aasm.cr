@@ -3,7 +3,7 @@ class AASM::Event
   getter! :transition
   getter :before, :after
 
-  def initialize(@transition : (Nil | Transition) = nil)
+  def initialize(@transition : Transition? = nil)
   end
 
   def transitions(from : (Symbol | Array(Symbol)) = nil, to : Symbol = nil)

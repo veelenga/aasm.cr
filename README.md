@@ -47,7 +47,7 @@ Currently state supports the following options:
 
   - `initial` : `Bool` **optional** - indicates whether this state is initial or not. If initial state not specified, first one will be considered as initial
   - `guard` : `(-> Bool)` **optional** - a callback, that gets evaluated once state is getting entered. State will not enter if guard returns false
-  - `enter` : `(->)` **optional** - a hook, that gets evaluated once state entered.
+  - `enter` : `(-> Nil)` **optional** - a hook, that gets evaluated once state entered.
 
 ### Events
 

@@ -14,14 +14,6 @@ module AASM
         t.from.should eq [:pending, :completed]
         t.to.should eq :active
       end
-
-      it "requires :form" do
-        expect_raises(KeyError) { Transition.new({to: :active}) }
-      end
-
-      it "requires :to" do
-        expect_raises(KeyError) { Transition.new({from: :pending}) }
-      end
     end
   end
 end

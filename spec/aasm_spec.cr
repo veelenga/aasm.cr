@@ -10,7 +10,7 @@ class Transaction
 
   def act_as_state_machine
     aasm.state :pending, initial: true
-    aasm.state :active,  enter: -> { @count += 1 }
+    aasm.state :active,  enter: -> { @count += 1; nil }
     aasm.state :completed
 
     aasm.event :activate do |e|
