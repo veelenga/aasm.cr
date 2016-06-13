@@ -140,21 +140,21 @@ module AASM
 
       it "runs enter block" do
         count = 0
-        s = two_states_machine enter: ->{ count += 1; nil }
+        s = two_states_machine enter: ->{ count += 1 }
         s.fire_event :activate
         count.should eq 1
       end
 
       it "does not run enter block if guard returns false" do
         count = 0
-        s = two_states_machine enter: ->{ count += 1; nil }, guard: ->{ false }
+        s = two_states_machine enter: ->{ count += 1 }, guard: ->{ false }
         s.fire_event :activate
         count.should eq 0
       end
 
       it "should not run block twice if event gets fired twice" do
         count = 0
-        s = two_states_machine enter: ->{ count += 1; nil }
+        s = two_states_machine enter: ->{ count += 1 }
         s.fire_event :activate
         s.fire_event :activate
         count.should eq 1
@@ -162,7 +162,7 @@ module AASM
 
       it "should handle cycled states" do
         count = 0
-        s = one_state_machine enter: ->{ count += 1; nil }
+        s = one_state_machine enter: ->{ count += 1 }
         s.fire_event :restart
         s.current_state_name.should eq :started
         count.should eq 1

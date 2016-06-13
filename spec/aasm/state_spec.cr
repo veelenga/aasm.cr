@@ -14,6 +14,11 @@ module AASM
         t.enter.should_not be_nil
       end
 
+      it "accepts :enter that can return anything" do
+        t = State.new({enter: ->{ "anything" }})
+        t.enter.not_nil!.call.should be_nil
+      end
+
       it "accepts :guard" do
         t = State.new({guard: ->{ true }})
         t.guard.should_not be_nil

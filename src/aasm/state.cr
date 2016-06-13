@@ -3,7 +3,9 @@ struct AASM::State
   getter guard : (-> Bool)?
 
   def initialize(opts = {enter: nil, guard: nil})
-    @enter = opts[:enter]?
+    if enter = opts[:enter]?
+      @enter = -> { enter.not_nil!.call; nil }
+    end
     @guard = opts[:guard]?
   end
 end
