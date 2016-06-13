@@ -1,5 +1,4 @@
 module AASM
-
   class AASMException < Exception
   end
 

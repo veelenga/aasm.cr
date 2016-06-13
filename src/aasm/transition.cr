@@ -1,5 +1,4 @@
 struct AASM::Transition
-
   getter! from : Array(Symbol)
   getter! to : Symbol
 
@@ -10,6 +9,6 @@ struct AASM::Transition
     elsif from.is_a? Array(Symbol)
       @from = from
     end
-    @to = opts[:to] as Symbol
+    @to = opts[:to]
   end
 end

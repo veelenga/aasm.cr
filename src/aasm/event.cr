@@ -1,5 +1,4 @@
 class AASM::Event
-
   getter! :transition
   getter :before, :after
 

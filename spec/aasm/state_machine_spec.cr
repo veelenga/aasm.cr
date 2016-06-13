@@ -1,6 +1,6 @@
 require "../spec_helper"
 
-def one_state_machine(enter = -> {}, guard = -> { true })
+def one_state_machine(enter = ->{}, guard = ->{ true })
   AASM::StateMachine.new.tap do |s|
     s.state :started, initial: true, enter: enter, guard: guard
     s.event :restart do |e|
@@ -9,7 +9,7 @@ def one_state_machine(enter = -> {}, guard = -> { true })
   end
 end
 
-def two_states_machine(enter = -> {}, guard = -> { true })
+def two_states_machine(enter = ->{}, guard = ->{ true })
   AASM::StateMachine.new.tap do |s|
     s.state :pending, initial: true
     s.state :active, enter: enter, guard: guard
@@ -19,7 +19,7 @@ def two_states_machine(enter = -> {}, guard = -> { true })
   end
 end
 
-def three_states_machine(enter1 = -> {}, guard1 = -> { true }, enter2 = -> {}, guard2 = -> { true })
+def three_states_machine(enter1 = ->{}, guard1 = ->{ true }, enter2 = ->{}, guard2 = ->{ true })
   AASM::StateMachine.new.tap do |s|
     s.state :pending, initial: true
     s.state :active, enter: enter1, guard: guard1
@@ -34,7 +34,6 @@ def three_states_machine(enter1 = -> {}, guard1 = -> { true }, enter2 = -> {}, g
 end
 
 module AASM
-
   describe StateMachine do
     describe "#state" do
       it "defines new state" do
@@ -87,7 +86,7 @@ module AASM
       end
 
       it "raises exception if transitions not defined" do
-        expect_raises(Exception) { StateMachine.new.event :activate {} }
+        expect_raises(Exception) { StateMachine.new.event :activate { } }
       end
 
       it "raises exception if event already defined" do
@@ -128,34 +127,34 @@ module AASM
       end
 
       it "does not change a state if guard returns false" do
-        s = two_states_machine guard: -> { false }
+        s = two_states_machine guard: ->{ false }
         s.fire_event :activate
         s.current_state_name.should eq :pending
       end
 
       it "changes a state if guard returns true" do
-        s = two_states_machine guard: -> { true }
+        s = two_states_machine guard: ->{ true }
         s.fire_event :activate
         s.current_state_name.should eq :active
       end
 
       it "runs enter block" do
         count = 0
-        s = two_states_machine enter: -> { count += 1; nil }
+        s = two_states_machine enter: ->{ count += 1; nil }
         s.fire_event :activate
         count.should eq 1
       end
 
       it "does not run enter block if guard returns false" do
         count = 0
-        s = two_states_machine enter: -> { count += 1; nil }, guard: -> { false }
+        s = two_states_machine enter: ->{ count += 1; nil }, guard: ->{ false }
         s.fire_event :activate
         count.should eq 0
       end
 
       it "should not run block twice if event gets fired twice" do
         count = 0
-        s = two_states_machine enter: -> { count += 1; nil }
+        s = two_states_machine enter: ->{ count += 1; nil }
         s.fire_event :activate
         s.fire_event :activate
         count.should eq 1
@@ -163,7 +162,7 @@ module AASM
 
       it "should handle cycled states" do
         count = 0
-        s = one_state_machine enter: -> { count += 1; nil }
+        s = one_state_machine enter: ->{ count += 1; nil }
         s.fire_event :restart
         s.current_state_name.should eq :started
         count.should eq 1
@@ -175,7 +174,7 @@ module AASM
         s.state :start
         s.event :restart do |e|
           e.before { count += 1 }
-          e.after  { count += 2 }
+          e.after { count += 2 }
           e.transitions from: :start, to: :start
         end
         s.fire_event :restart

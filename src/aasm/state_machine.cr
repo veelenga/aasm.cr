@@ -1,5 +1,4 @@
 class AASM::StateMachine
-
   getter current_state_name
 
   def initialize
