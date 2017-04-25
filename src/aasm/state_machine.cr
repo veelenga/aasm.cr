@@ -7,7 +7,7 @@ class AASM::StateMachine
     @transition_table = {} of Symbol => Array(Symbol)
   end
 
-  def state(name : Symbol, initial : Bool = false, enter : (-> _) = nil, guard : (-> Bool) = nil)
+  def state(name : Symbol, initial : Bool = false, enter : (-> _)? = nil, guard : (-> Bool)? = nil)
     check_states_already_defined name
     state = State.new({enter: enter, guard: guard})
     @current_state_name = name if initial || @current_state_name.nil?
