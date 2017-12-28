@@ -35,8 +35,8 @@ describe AASM do
     end
 
     it "raises exception on fire" do
-      expect_raises { Transaction.new.fire :activate }
-      expect_raises { Transaction.new.fire! :activate }
+      expect_raises(AASM::NoSuchEventException) { Transaction.new.fire :activate }
+      expect_raises(AASM::NoSuchEventException) { Transaction.new.fire! :activate }
     end
   end
 
