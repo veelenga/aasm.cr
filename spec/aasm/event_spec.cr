@@ -32,7 +32,7 @@ module AASM
       it "accepts before block" do
         e = Event.new
         e.before.should be_nil
-        e.before { a = 10 }
+        e.before { 10 }
         e.before.should_not be_nil
       end
     end
@@ -41,7 +41,7 @@ module AASM
       it "accepts after block" do
         e = Event.new
         e.after.should be_nil
-        e.after { b = 20 }
+        e.after { 20 }
         e.after.should_not be_nil
       end
     end
