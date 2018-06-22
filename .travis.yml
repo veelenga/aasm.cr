@@ -1,6 +1,6 @@
 language: crystal
 install:
-  - crystal deps
+  - shards install
 script:
   - crystal spec
   - bin/ameba
