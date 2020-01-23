@@ -205,5 +205,22 @@ module AASM
         expect_raises(UnableToChangeState) { s.fire_event :complete, true }
       end
     end
+
+    describe "#to_json" do
+      it "creates a StateMachine based on given json" do
+
+        # s = two_states_machine
+        # s.next_state.should eq :active
+
+        s1 = two_states_machine
+        s1.fire_event :activate
+        s1.next_state.should eq nil
+
+        state_json = s1.to_json
+
+        s2 = two_states_machine.from_json(state_json)
+        s2.state.should eq (s1.state)
+      end
+    end
   end
 end
