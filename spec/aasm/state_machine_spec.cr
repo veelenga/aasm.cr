@@ -208,7 +208,6 @@ module AASM
 
     describe "#to_json" do
       it "creates a StateMachine based on given json" do
-
         # s = two_states_machine
         # s.next_state.should eq :active
 
