@@ -26,9 +26,15 @@ module AASM
     end
   end
 
-  class UnableToChangeState < AASMException
-    def initialize(from, to)
-      super "Unable to change state from '#{from}' to '#{to}'"
+  class UnableToChangeStateException < AASMException
+    def initialize(from)
+      super "Unable to change state from '#{from}'"
+    end
+  end
+
+  class NoTransitionsException < AASMException
+    def initialize
+      super "Unable to fire event with empty transitions"
     end
   end
 end

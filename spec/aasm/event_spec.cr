@@ -8,8 +8,8 @@ module AASM
       end
 
       it "accepts Transition" do
-        e = Event.new Transition.new({from: :pending, to: :active})
-        e.transition.should_not be_nil
+        e = Event.new [Transition.new({from: :pending, to: :active})]
+        e.transition.should_not be_empty
       end
     end
 
@@ -17,14 +17,18 @@ module AASM
       it "creates new transition" do
         e = Event.new
         e.transitions(from: :pending, to: :active)
-        e.transition.should_not be_nil
+        e.transition.should_not be_empty
       end
 
-      it "does not create new transition if it been created" do
+      it "adds more transitions" do
         e = Event.new
         e.transitions(from: :pending, to: :active)
         e.transitions(from: :active, to: :competed)
-        e.transition.from.should eq [:pending]
+        e.transition.first.from.should eq [:pending]
+        e.transition.first.to.should eq :active
+        e.transition.last.from.should eq [:active]
+        e.transition.last.to.should eq :competed
+        e.transition.size.should eq(2)
       end
     end
 

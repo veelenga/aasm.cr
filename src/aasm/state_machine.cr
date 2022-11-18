@@ -18,9 +18,11 @@ class AASM::StateMachine
     check_events_already_defined name
     event = Event.new
     yield event
-    transition = event.transition
-    check_states_exist transition.from + [transition.to]
-    transition.from.each { |s| (@transition_table[s] ||= [] of Symbol) << transition.to }
+    check_transitions_exist event.transition
+    event.transition.each do |transition|
+      check_states_exist transition.from + [transition.to]
+      transition.from.each { |s| (@transition_table[s] ||= [] of Symbol) << transition.to }
+    end
     @events[name] = event
   end
 
@@ -32,9 +34,9 @@ class AASM::StateMachine
     check_events_exist event_name
 
     event = @events[event_name]
-    transition = event.transition
+    found_transition = event.transition.find { |subject| subject.from.includes? @current_state_name }
 
-    if transition.from.includes? @current_state_name
+    if transition = found_transition
       event.before.try &.call
       state = @states[transition.to]
       if state.guard.nil? || state.guard.not_nil!.call
@@ -43,8 +45,12 @@ class AASM::StateMachine
       end
       event.after.try &.call
     else
-      raise UnableToChangeState.new(@current_state_name, transition.to) if raise_exception
+      raise UnableToChangeStateException.new(@current_state_name) if raise_exception
     end
+  end
+
+  private def check_transitions_exist(transitions)
+    raise NoTransitionsException.new if transitions.empty?
   end
 
   private def check_states_exist(state_names)

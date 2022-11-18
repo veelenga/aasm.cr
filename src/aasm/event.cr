@@ -2,11 +2,11 @@ class AASM::Event
   getter! :transition
   getter :before, :after
 
-  def initialize(@transition : Transition? = nil)
+  def initialize(@transition : Array(Transition) = Array(Transition).new)
   end
 
   def transitions(from : (Symbol | Array(Symbol)) = nil, to : Symbol = nil)
-    @transition ||= Transition.new({from: from, to: to})
+    @transition << Transition.new({from: from, to: to})
   end
 
   def before(&block)

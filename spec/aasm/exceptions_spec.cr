@@ -25,9 +25,9 @@ module AASM
     end
   end
 
-  describe UnableToChangeState do
+  describe UnableToChangeStateException do
     it "raises" do
-      expect_raises(AASMException) { raise UnableToChangeState.new :pending, :active }
+      expect_raises(AASMException) { raise UnableToChangeStateException.new :pending }
     end
   end
 end
