@@ -202,7 +202,7 @@ module AASM
         s.state :active
         s.state :completed
         s.event :complete { |e| e.transitions from: :active, to: :completed }
-        expect_raises(UnableToChangeState) { s.fire_event :complete, true }
+        expect_raises(UnableToChangeStateException) { s.fire_event :complete, true }
       end
     end
   end
