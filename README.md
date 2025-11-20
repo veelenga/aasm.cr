@@ -1,4 +1,4 @@
-# aasm.cr [![Build Status](https://travis-ci.org/veelenga/aasm.cr.svg?branch=master)](https://travis-ci.org/veelenga/aasm.cr)
+# aasm.cr
 
 Aasm stands for **"Acts As State Machine"** which means that some abstract object can act as a [finite state machine](https://en.wikipedia.org/wiki/Finite-state_machine) and can be in one of a finite number of states at a time; can change one state to another when initiated by a triggering event.
 
