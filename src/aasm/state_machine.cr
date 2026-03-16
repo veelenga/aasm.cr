@@ -1,6 +1,17 @@
 class AASM::StateMachine
   getter current_state_name
 
+  include JSON::Serializable
+
+  def to_json
+    {
+      states:             @states,
+      events:             @events,
+      transition_table:   @transition_table,
+      current_state_name: @current_state_name,
+    }.to_json
+  end
+
   def initialize
     @states = {} of Symbol => State
     @events = {} of Symbol => Event
